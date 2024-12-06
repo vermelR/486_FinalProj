@@ -9,42 +9,6 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Load and preprocess the data
 file_path = '/Users/vidushikataria/Downloads/Stat_486/486_FinalProj/calendar.csv'
 data = pd.read_csv(file_path)
