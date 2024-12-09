@@ -7,23 +7,16 @@ from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor, GradientBoostingRegressor
 from sklearn.metrics import mean_squared_error, r2_score
 
-
-
-# Load and preprocess the data
-file_path = '/Users/vidushikataria/Downloads/Stat_486/486_FinalProj/calendar.csv'
+file_path = 'calendar.csv'
 data = pd.read_csv(file_path)
 
-# Drop the 'adjusted_price' column if it exists
 if 'adjusted_price' in data.columns:
     data.drop(columns=['adjusted_price'], inplace=True)
 
-# Strip any leading/trailing spaces from column names
 data.columns = data.columns.str.strip()
 
-# Convert 'price' to float by removing dollar signs and commas
-data['price'] = data['price'].replace({'\$': '', ',': ''}, regex=True).astype(float)
+data['price'] = data['price'].replace({r'\$': '', ',': ''}, regex=True).astype(float)
 
-# Visualization Part
 sns.set(style="whitegrid")
 
 # 1. Histogram of the price feature
@@ -52,7 +45,6 @@ plt.show()
 # Data Preprocessing
 
 # 1. Encoding Categorical Variables
-# Identify categorical columns
 categorical_cols = data.select_dtypes(include=['object']).columns.tolist()
 print("Categorical columns before encoding:", categorical_cols)
 
@@ -60,22 +52,16 @@ print("Categorical columns before encoding:", categorical_cols)
 data_encoded = pd.get_dummies(data, columns=categorical_cols, drop_first=True)
 
 # 2. Feature Scaling
-# Identify numerical columns for scaling
 numerical_cols = data_encoded.select_dtypes(include=['float64', 'int64']).columns.tolist()
 print("Numerical columns before scaling:", numerical_cols)
 
-# Initialize the scaler
 scaler = StandardScaler()
 
-# Fit and transform the numerical columns
 data_encoded[numerical_cols] = scaler.fit_transform(data_encoded[numerical_cols])
 
-# Define the target variable and features
-# 'price' is the target variable
 X = data_encoded.drop(columns=['price'])
 y = data_encoded['price']
 
-# Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # 1. Linear Regression Model
@@ -107,3 +93,18 @@ gbm_predictions = gbm_model.predict(X_test)
 gbm_mse = mean_squared_error(y_test, gbm_predictions)
 gbm_r2 = r2_score(y_test, gbm_predictions)
 print(f'GBM MSE: {gbm_mse:.4f}, R^2 Score: {gbm_r2:.4f}')
+
+# getting the mean, median, sd, etc
+mean_price = data['price'].mean()
+median_price = data['price'].median()
+std_price = data['price'].std()
+var_price = data['price'].var()
+min_price = data['price'].min()
+max_price = data['price'].max()
+
+print(f"Mean Price: {mean_price:.2f}")
+print(f"Median Price: {median_price:.2f}")
+print(f"Standard Deviation: {std_price:.2f}")
+print(f"Variance: {var_price:.2f}")
+print(f"Minimum Price: {min_price:.2f}")
+print(f"Maximum Price: {max_price:.2f}")
